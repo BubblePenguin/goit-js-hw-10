@@ -11,21 +11,33 @@ const refs = {
   div: document.querySelector('.country-info'),
 };
 
+function clear() {
+  refs.ul.innerHTML = '';
+  refs.div.innerHTML = '';
+}
+
 refs.input.addEventListener(
   'input',
   debounce(e => {
-    fetchCountries(e.target.value)
+    if (e.target.value.length <= 0) {
+      clear();
+      return;
+    }
+    fetchCountries(e.target.value.trim())
       .then(value => {
         if (value.length > 10) {
           Notiflix.Notify.warning(
             'Too many matches found. Please enter a more specific name.'
           );
-          refs.ul.innerHTML = '';
-          refs.div.innerHTML = '';
+          clear();
+          return;
+        }
+        if (value.length < 1) {
+          Notiflix.Notify.failure('Oops, there is no country with that name');
           return;
         }
         if (value.length === 1) {
-          refs.ul.innerHTML = '';
+          clear();
           refs.div.innerHTML = `<h2>
         <img src="${value[0].flags.svg}" alt="${
             value[0].flags.alt
@@ -45,11 +57,6 @@ refs.input.addEventListener(
             })
             .join('');
           refs.div.innerHTML = '';
-          return;
-        }
-
-        if (value.length < 1) {
-          Notiflix.Notify.failure('Oops, there is no country with that name');
           return;
         }
       })
