@@ -51,7 +51,6 @@ refs.input.addEventListener(
               return `<li><p><img src="${v.flags.svg}" alt="${v.flags.svg}" width="20"> ${v.name.common}</p></li>`;
             })
             .join('');
-          refs.div.innerHTML = '';
           return;
         }
 
