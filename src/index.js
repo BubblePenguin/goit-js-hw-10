@@ -56,9 +56,10 @@ refs.input.addEventListener(
           refs.div.innerHTML = '';
           return;
         }
+        Notiflix.Notify.failure('Oops, there is no country with that name');
       })
       .catch(e => {
-        Notiflix.Notify.failure("'Oops, there is no country with that name'");
+        Notiflix.Notify.failure('Im catch, and if you see me, its ur fault.');
       });
   }, DEBOUNCE_DELAY)
 );
