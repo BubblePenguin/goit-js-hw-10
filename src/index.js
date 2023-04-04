@@ -60,6 +60,8 @@ refs.input.addEventListener(
           return;
         }
       })
-      .catch(e);
+      .catch(e => {
+        Notiflix.Notify.failure(e);
+      });
   }, DEBOUNCE_DELAY)
 );
