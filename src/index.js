@@ -25,15 +25,12 @@ refs.input.addEventListener(
     }
     fetchCountries(e.target.value.trim())
       .then(value => {
+        console.log(value);
         if (value.length > 10) {
           Notiflix.Notify.warning(
             'Too many matches found. Please enter a more specific name.'
           );
           clear();
-          return;
-        }
-        if (value.length < 1) {
-          Notiflix.Notify.failure('Oops, there is no country with that name');
           return;
         }
         if (value.length === 1) {
@@ -61,7 +58,7 @@ refs.input.addEventListener(
         }
       })
       .catch(e => {
-        Notiflix.Notify.failure(e);
+        Notiflix.Notify.failure("'Oops, there is no country with that name'");
       });
   }, DEBOUNCE_DELAY)
 );
