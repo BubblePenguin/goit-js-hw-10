@@ -1,9 +1,58 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
+import { fetchCountries } from './fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
 
 const refs = {
   input: document.querySelector('#search-box'),
+  ul: document.querySelector('.country-list'),
+  div: document.querySelector('.country-info'),
 };
+
+refs.input.addEventListener(
+  'input',
+  debounce(e => {
+    fetchCountries(e.target.value)
+      .then(value => {
+        if (value.length > 10) {
+          Notiflix.Notify.warning(
+            'Too many matches found. Please enter a more specific name.'
+          );
+          refs.ul.innerHTML = '';
+          refs.div.innerHTML = '';
+          return;
+        }
+        if (value.length === 1) {
+          refs.ul.innerHTML = '';
+          refs.div.innerHTML = `<h2>
+        <img src="${value[0].flags.svg}" alt="${
+            value[0].flags.alt
+          }" width="30" /> ${value[0].name.common}
+      </h2>
+      <p><strong>Capital:</strong> ${value[0].capital}</p>
+      <p><strong>Population:</strong> ${value[0].population}</p>
+      <p><strong>Languages:</strong> ${Object.values(value[0].languages).join(
+        ', '
+      )}</p>`;
+          return;
+        }
+        if (value.length <= 10) {
+          refs.ul.innerHTML = value
+            .map(v => {
+              return `<li><p><img src="${v.flags.svg}" alt="${v.flags.svg}" width="20"> ${v.name.common}</p></li>`;
+            })
+            .join('');
+          refs.div.innerHTML = '';
+          return;
+        }
+
+        if (value.length < 1) {
+          Notiflix.Notify.failure('Oops, there is no country with that name');
+          return;
+        }
+      })
+      .catch(e);
+  }, DEBOUNCE_DELAY)
+);
