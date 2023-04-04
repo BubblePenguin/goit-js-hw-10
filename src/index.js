@@ -57,8 +57,9 @@ refs.input.addEventListener(
           return;
         }
         Notiflix.Notify.failure('Oops, there is no country with that name');
+        clear();
       })
-      .catch(e => {
+      .catch(() => {
         Notiflix.Notify.failure('Im catch, and if you see me, its ur fault.');
       });
   }, DEBOUNCE_DELAY)
