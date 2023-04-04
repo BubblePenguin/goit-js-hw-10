@@ -19,22 +19,20 @@ function clear() {
 refs.input.addEventListener(
   'input',
   debounce(e => {
+    clear();
     if (e.target.value.length <= 0) {
-      clear();
       return;
     }
     fetchCountries(e.target.value.trim())
       .then(value => {
-        console.log(value);
         if (value.length > 10) {
           Notiflix.Notify.warning(
             'Too many matches found. Please enter a more specific name.'
           );
-          clear();
+
           return;
         }
         if (value.length === 1) {
-          clear();
           refs.div.innerHTML = `<h2>
         <img src="${value[0].flags.svg}" alt="${
             value[0].flags.alt
@@ -56,8 +54,8 @@ refs.input.addEventListener(
           refs.div.innerHTML = '';
           return;
         }
+
         Notiflix.Notify.failure('Oops, there is no country with that name');
-        clear();
       })
       .catch(() => {
         Notiflix.Notify.failure('Im catch, and if you see me, its ur fault.');
