@@ -20,10 +20,11 @@ refs.input.addEventListener(
   'input',
   debounce(e => {
     clear();
-    if (e.target.value.length <= 0) {
+    const text = e.target.value.trim();
+    if (!text) {
       return;
     }
-    fetchCountries(e.target.value.trim())
+    fetchCountries(text)
       .then(value => {
         if (value.length > 10) {
           Notiflix.Notify.warning(
